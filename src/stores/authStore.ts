@@ -28,6 +28,8 @@ type AuthStore = AuthState & {
   loginWithPhone: (phone: string, otp_code: string) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   requestPhoneOtp: (phone: string) => Promise<void>;
+  requestEmailOtp: (email: string) => Promise<void>; // <-- ajouté
+  verifyEmailOtp: (email: string, otp_code: string) => Promise<void>; // <-- ajouté
   logout: () => void;
   setUser: (user: User) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
@@ -98,6 +100,40 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
+      // ====================================
+      // OTP par email
+      // ====================================
+      requestEmailOtp: async (email) => {
+        set({ isLoading: true, error: null });
+        try {
+          await post(ENDPOINTS.auth.requestEmailOtp, { email });
+          set({ isLoading: false });
+        } catch (error) {
+          set({ error: error instanceof Error ? error.message : 'Impossible de demander l\'OTP par email.', isLoading: false });
+          throw error;
+        }
+      },
+
+      verifyEmailOtp: async (email, otp_code) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await post<LoginResponse>(ENDPOINTS.auth.verifyEmailOtp, { email, otp_code });
+          set({
+            user: response.user,
+            accessToken: response.access,
+            refreshToken: response.refresh,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+          localStorage.setItem('access_token', response.access);
+          localStorage.setItem('refresh_token', response.refresh);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        } catch (error) {
+          set({ error: error instanceof Error ? error.message : 'OTP invalide ou expiré.', isLoading: false });
+          throw error;
+        }
+      },
+
       register: async (data) => {
         set({ isLoading: true, error: null });
         try {
@@ -117,7 +153,7 @@ export const useAuthStore = create<AuthStore>()(
             user: response.user,
             accessToken: response.access,
             refreshToken: response.refresh,
-            isAuthenticated: true,
+            // isAuthenticated: true,
             isLoading: false,
           });
 

@@ -38,6 +38,7 @@ import UserRefundsPage from "./pages/account/UserRefundsPage";
 import UserNotificationsPage from "./pages/account/UserNotificationsPage";
 import UserProfilePage from "./pages/account/UserProfilePage";
 import UserSettingsPage from "./pages/account/UserSettingsPage";
+import VerifyOTPForm from "./pages/VerifyOTPForm";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
+          <Route path="/otp-verify" element={<VerifyOTPForm />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetailPage />} />
           <Route path="/login" element={<LoginPage />} />

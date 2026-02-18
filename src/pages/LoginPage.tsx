@@ -16,6 +16,11 @@ export default function LoginPage() {
   });
   const [formError, setFormError] = useState<string | null>(null);
 
+  // Gestion OTP
+  const [step, setStep] = useState<"login"| "otp">("login")
+  const [otp, setOtp] = useState("");
+  const [otpError, setOtpError] = useState<string | null>(null);
+
   // Redirection automatique si déjà connecté
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -33,7 +38,7 @@ export default function LoginPage() {
     setFormError(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
 
@@ -43,27 +48,21 @@ export default function LoginPage() {
     }
 
     try {
+      // 1️⃣ Connexion initiale avec email + password
       await login(formData.email, formData.password);
-      
-      // Récupérer l'utilisateur immédiatement après la connexion
-      const state = useAuthStore.getState();
-      const currentUser = state.user;
-      
-      console.log('[LoginPage] User logged in:', currentUser);
-      console.log('[LoginPage] User role:', currentUser?.role);
-      
-      toast({ title: "Connexion réussie", description: "Vous êtes maintenant connecté." });
-      
-      // Redirection immédiate basée sur le rôle
-      setTimeout(() => {
-        if (currentUser && ["admin", "organizer"].includes(currentUser.role)) {
-          console.log('[LoginPage] Redirecting to /admin');
-          navigate("/admin");
-        } else {
-          console.log('[LoginPage] Redirecting to /');
-          navigate("/");
-        }
-      }, 500);
+
+      // 2️⃣ Envoyer OTP depuis le backend
+      const res = await fetch("http://127.0.0.1:8000/api/v1/auth/send-otp/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email }),
+      });
+
+      if (!res.ok) throw new Error("Impossible d'envoyer l'OTP");
+
+      setStep("otp");
+      toast({ title: "OTP envoyé", description: "Vérifiez votre email pour le code OTP." });
+
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Connexion échouée";
       setFormError(errorMsg);
@@ -71,7 +70,34 @@ export default function LoginPage() {
     }
   };
 
-  const displayError = formError || error;
+  const handleSubmitOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setOtpError(null);
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/v1/auth/verify-otp/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email, code: otp }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "OTP invalide ou expiré");
+
+      toast({ title: "Connexion réussie", description: "OTP validé ✅" });
+
+      // Redirection après OTP
+      if (user && ["admin", "organizer"].includes(user.role)) navigate("/admin");
+      else navigate("/");
+
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "Erreur OTP";
+      setOtpError(errorMsg);
+      toast({ title: "Erreur OTP", description: errorMsg, variant: "destructive" });
+    }
+  };
+
+  const displayError = step === "login" ? (formError || error) : otpError;
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12 bg-background">
@@ -88,10 +114,10 @@ export default function LoginPage() {
 
         <div className="bg-card rounded-2xl border border-border p-6 md:p-8 shadow-lg">
           <h1 className="font-display font-bold text-2xl text-center mb-2">
-            Connexion
+            {step === "login" ? "Connexion" : "Vérification OTP"}
           </h1>
           <p className="text-muted-foreground text-center mb-6 text-sm">
-            Connectez-vous pour continuer
+            {step === "login" ? "Connectez-vous pour continuer" : "Entrez le code OTP envoyé à votre email"}
           </p>
 
           {/* Error Message */}
@@ -102,58 +128,81 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="vous@exemple.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="pl-10"
-                  required
-                  disabled={isLoading}
-                />
+          {step === "login" ? (
+            <form onSubmit={handleSubmitLogin} className="space-y-4">
+              {/* Email */}
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium">Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="vous@exemple.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="pl-10"
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Password */}
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">Mot de passe</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="pl-10"
-                  required
-                  disabled={isLoading}
-                />
+              {/* Password */}
+              <div className="space-y-2">
+                <label htmlFor="password" className="text-sm font-medium">Mot de passe</label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="pl-10"
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Submit Button */}
-            <Button type="submit" className="w-full mt-6" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLoading ? "Connexion..." : "Se connecter"}
-            </Button>
-          </form>
+              <Button type="submit" className="w-full mt-6" disabled={isLoading}>
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isLoading ? "Connexion..." : "Se connecter"}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleSubmitOTP} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="otp" className="text-sm font-medium">Code OTP</label>
+                <Input
+                  id="otp"
+                  name="otp"
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  placeholder="Entrez le code OTP"
+                  required
+                />
+                {otpError && <p className="text-red-500 text-sm">{otpError}</p>}
+              </div>
 
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            Pas encore de compte ?{" "}
-            <Link to="/register" className="text-blue-500 hover:underline font-medium">
-              S'inscrire
-            </Link>
-          </p>
+              <Button type="submit" className="w-full mt-4">
+                Vérifier OTP
+              </Button>
+            </form>
+          )}
+
+          {step === "login" && (
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              Pas encore de compte ?{" "}
+              <Link to="/register" className="text-blue-500 hover:underline font-medium">
+                S'inscrire
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </div>
