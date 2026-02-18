@@ -63,10 +63,10 @@ export function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-glow transition-transform duration-300 group-hover:scale-105">
-              <span className="text-primary-foreground font-display font-bold text-lg">T</span>
+              <span className="text-primary-foreground font-display font-bold text-lg">AD</span>
             </div>
             <span className="font-display font-bold text-xl text-foreground">
-              Tikerama
+              Award Dan
             </span>
           </Link>
 

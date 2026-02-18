@@ -22,7 +22,7 @@ export function Footer() {
               <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-105">
                 <span className="text-primary-foreground font-display font-bold text-lg">T</span>
               </div>
-              <span className="font-display font-bold text-xl">Tikerama</span>
+              <span className="font-display font-bold text-xl">Award Dan</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-6 max-w-xs">
               La billetterie en ligne #1 en Côte d'Ivoire. Réservez vos billets en toute sécurité avec Mobile Money.
@@ -115,7 +115,7 @@ export function Footer() {
                   className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Mail className="h-4 w-4" />
-                  contact@tikerama.ci
+                  contact@awarddan.ci
                 </a>
               </li>
             </ul>
@@ -129,7 +129,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             {/* Copyright & Legal */}
             <div className="flex flex-col md:flex-row items-center gap-4 text-sm text-muted-foreground">
-              <p>© {new Date().getFullYear()} Tikerama. Tous droits réservés.</p>
+              <p>© {new Date().getFullYear()} awarddan. Tous droits réservés.</p>
               <div className="flex gap-4">
                 <a href="#" className="hover:text-foreground transition-colors">CGV</a>
                 <a href="#" className="hover:text-foreground transition-colors">Confidentialité</a>
