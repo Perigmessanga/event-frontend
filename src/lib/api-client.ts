@@ -11,6 +11,9 @@ export interface ApiResponse<T> {
   [key: string]: string | T | undefined;
 }
 
+const API_BASE_URL = "http://localhost:8000/api/v1";
+
+
 /**
  * Make an API request with automatic token handling
  */
@@ -19,7 +22,7 @@ export async function apiCall<T>(
   options: FetchOptions = {}
 ): Promise<T> {
   const url = `${API_CONFIG.baseUrl}${endpoint}`;
-  
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...options.headers,
@@ -83,7 +86,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
   if (!response.ok) {
     let errorMessage = 'An error occurred';
-    
+
     if (typeof data === 'object' && data !== null) {
       const obj = data as Record<string, unknown>;
       if (obj.error) errorMessage = String(obj.error);
@@ -103,7 +106,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
         }
       }
     }
-    
+
     console.error(`API Error (${response.status}):`, errorMessage, data);
     throw new Error(errorMessage);
   }

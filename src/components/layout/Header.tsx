@@ -11,7 +11,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const location = useLocation();
-  
+
   const { isAuthenticated, user, logout, hasRole } = useAuthStore();
   const { items } = useCartStore();
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -40,6 +40,7 @@ export function Header() {
   const navLinks = [
     { href: '/', label: 'Accueil' },
     { href: '/events', label: 'Événements' },
+    { href: '/contacts', label: 'Contacts' },
   ];
 
   if (isAuthenticated) {
@@ -50,11 +51,11 @@ export function Header() {
   }
 
   return (
-    <header 
+    <header
       className={cn(
         'sticky top-0 z-50 transition-all duration-300',
-        scrolled 
-          ? 'glass-strong shadow-sm' 
+        scrolled
+          ? 'glass-strong shadow-sm'
           : 'bg-background/80 backdrop-blur-sm border-b border-transparent'
       )}
     >
@@ -65,7 +66,7 @@ export function Header() {
             <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-glow transition-transform duration-300 group-hover:scale-105">
               <span className="text-primary-foreground font-display font-bold text-lg">AD</span>
             </div>
-            <span className="font-display font-bold text-xl text-foreground">
+            <span className="font-display font-bold text-xl text-yellow-500">
               Award Dan
             </span>
           </Link>
@@ -91,9 +92,9 @@ export function Header() {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-2">
             {/* Dark Mode Toggle */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={toggleDarkMode}
               className="text-muted-foreground hover:text-foreground"
             >
@@ -115,9 +116,9 @@ export function Header() {
             {isAuthenticated ? (
               <div className="flex items-center gap-1 ml-2">
                 <Link to="/my-tickets">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="gap-2 px-3 hover:bg-muted/50"
                   >
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
@@ -129,9 +130,9 @@ export function Header() {
                     <ChevronDown className="h-4 w-4 text-muted-foreground" />
                   </Button>
                 </Link>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={logout}
                   className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                 >
@@ -149,15 +150,15 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={toggleDarkMode}
               className="text-muted-foreground"
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-            
+
             <Link to="/checkout" className="relative">
               <Button variant="ghost" size="icon">
                 <ShoppingCart className="h-5 w-5" />
@@ -168,7 +169,7 @@ export function Header() {
                 )}
               </Button>
             </Link>
-            
+
             <Button
               variant="ghost"
               size="icon"
@@ -205,7 +206,7 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            
+
             <div className="border-t border-border mt-2 pt-2">
               {isAuthenticated ? (
                 <div className="space-y-1">
