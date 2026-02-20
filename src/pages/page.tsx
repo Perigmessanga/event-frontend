@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, forwardRef } from "react";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,9 +58,9 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-19">
-       <Header />
+      <Header />
       <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12">
-       
+
         {/* LEFT SIDE */}
         <div className="space-y-6">
           <ContactCard icon={<Mail />} title="Email">
@@ -152,14 +153,28 @@ function ContactCard({ icon, title, children }: { icon: React.ReactNode; title: 
   );
 }
 
-const InputField = ({ label, error, type = "text", ...props }: any) => (
-  <div>
-    <label className="block mb-2 font-medium">{label}</label>
-    <input
-      type={type}
-      {...props}
-      className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400 focus:outline-none"
-    />
-    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-  </div>
+interface InputFieldProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  error?: string;
+}
+
+const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
+  ({ label, error, type = "text", ...props }, ref) => (
+    <div>
+      <label className="block mb-2 font-medium">{label}</label>
+      <input
+        ref={ref}
+        type={type}
+        {...props}
+        className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-orange-400 focus:outline-none"
+      />
+      {error && (
+        <p className="text-red-500 text-sm mt-1">{error}</p>
+      )}
+    </div>
+  )
 );
+
+InputField.displayName = "InputField";
+
