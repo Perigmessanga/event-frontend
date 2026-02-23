@@ -123,7 +123,7 @@ export function Header() {
                   >
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
                       <span className="text-primary-foreground text-xs font-semibold">
-                        {user?.firstName?.charAt(0)?.toUpperCase()}
+                        {user?.first_Name?.charAt(0)?.toUpperCase()}
                       </span>
                     </div>
                     <span className="max-w-[100px] truncate font-medium">{user?.firstName}</span>

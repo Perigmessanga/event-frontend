@@ -9,6 +9,7 @@ import { mockEvents, getFeaturedEvents } from '@/data/events';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
+
 const categories = [
   { id: 'all', label: 'Tous', emoji: '🎉' },
   { id: 'Musique', label: 'Musique', emoji: '🎵' },
@@ -75,21 +76,38 @@ export default function HomePage() {
           <div className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
         </div>
 
-        <div className="container mx-auto px-4 relative">
-          <div className="max-w-4xl mx-auto text-center">
+        <div className="container mx-auto px-4 relative"
+          style={{
+            backgroundImage: "url('/ed8615300b6a80c98b0fd390c7258211d5d48696.jpg')",
+            backgroundSize: "cover",        // couvre toute la div
+            backgroundPosition: "center",    // centre l'image
+            backgroundRepeat: "no-repeat",   // pas de répétition
+            width: "20000px", //toute la largeur disponible
+            height: "748px",           // hauteur fixe
+            gap: "10px",
+            opacity: 3,
+            padding: "10px",
+          }} >
+          <div
+            className="max-w-4xl mx-auto text-center rounded-b-2xl overflow-hidden relative"
+
+          >
+
+
+
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-5 py-2.5 rounded-full text-sm font-semibold mb-8 animate-fade-in shadow-sm border border-primary/20">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-black px-5 py-2.5 rounded-full text-sm font-semibold mb-8 animate-fade-in shadow-sm border border-primary/20">
               <Sparkles className="h-4 w-4" />
               La billetterie #1 en Côte d'Ivoire
               <ChevronRight className="h-4 w-4" />
             </div>
-            
+
             <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground mb-6 animate-fade-in-up tracking-tight">
               Vos événements préférés,{' '}
               <span className="text-gradient">un clic suffit</span>
             </h1>
-            
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-fade-in leading-relaxed">
+
+            <p className="text-lg md:text-xl text-black mb-10 max-w-2xl mx-auto animate-fade-in leading-relaxed">
               Concerts, festivals, sport, spectacles... Réservez et payez avec Mobile Money en toute simplicité.
             </p>
 
@@ -132,8 +150,8 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-6 md:gap-0 md:divide-x divide-border">
             {features.map((feature, index) => (
-              <div 
-                key={feature.title} 
+              <div
+                key={feature.title}
                 className="flex items-center gap-4 px-6 py-2 animate-fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
@@ -179,8 +197,8 @@ export default function HomePage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               {featuredEvents.slice(0, 2).map((event, index) => (
-                <div 
-                  key={event.id} 
+                <div
+                  key={event.id}
                   className="animate-fade-in-up"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -231,8 +249,8 @@ export default function HomePage() {
               ))
             ) : (
               upcomingEvents.map((event, index) => (
-                <div 
-                  key={event.id} 
+                <div
+                  key={event.id}
                   className="animate-fade-in"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
@@ -291,8 +309,8 @@ export default function HomePage() {
                 gradient: 'bg-success',
               },
             ].map((item, index) => (
-              <div 
-                key={item.step} 
+              <div
+                key={item.step}
                 className="relative text-center group animate-fade-in-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
@@ -300,7 +318,7 @@ export default function HomePage() {
                 {index < 2 && (
                   <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-border via-border to-transparent" />
                 )}
-                
+
                 <div className="relative inline-block mb-6">
                   <div className={cn(
                     'w-24 h-24 rounded-3xl flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-105',
@@ -312,7 +330,7 @@ export default function HomePage() {
                     {item.step}
                   </span>
                 </div>
-                
+
                 <h3 className="font-display font-bold text-xl mb-3">{item.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
                   {item.description}
@@ -331,21 +349,21 @@ export default function HomePage() {
               <Shield className="h-4 w-4" />
               Paiement 100% sécurisé
             </div>
-            
+
             <h2 className="font-display font-bold text-3xl md:text-4xl mb-4">
               Payez avec Mobile Money
             </h2>
             <p className="text-muted-foreground mb-10 max-w-lg mx-auto">
               Nous acceptons tous les principaux opérateurs Mobile Money en Côte d'Ivoire
             </p>
-            
+
             <div className="flex justify-center gap-4 flex-wrap">
               {[
                 { name: 'Orange Money', class: 'momo-orange', letter: 'O' },
                 { name: 'MTN MoMo', class: 'momo-mtn', letter: 'M' },
                 { name: 'Wave', class: 'momo-wave', letter: 'W' },
               ].map((provider) => (
-                <div 
+                <div
                   key={provider.name}
                   className={cn(
                     'flex items-center gap-3 px-6 py-4 rounded-2xl shadow-lg hover-lift cursor-default',
