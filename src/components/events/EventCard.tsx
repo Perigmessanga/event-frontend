@@ -5,12 +5,13 @@ import { formatCurrency, formatDateCompact, getRelativeTime } from '@/lib/format
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
+
+
 interface EventCardProps {
   event: Event;
   variant?: 'default' | 'featured' | 'compact';
   className?: string;
 }
-
 export function EventCard({ event, variant = 'default', className }: EventCardProps) {
   const lowestPrice = event.ticketTypes && event.ticketTypes.length > 0
     ? Math.min(...event.ticketTypes.map(t => t.price))
@@ -21,6 +22,7 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
     ? event.ticketTypes.reduce((sum, t) => sum + (t.available || 0), 0)
     : (event.capacity || 0);
   const isAlmostSoldOut = totalAvailable < 50;
+                 console.log("Event image source:", event.image_url);
 
   if (variant === 'compact') {
     return (
@@ -28,7 +30,7 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
         <article className="event-card flex gap-4 p-4 group-hover:border-primary/30">
           <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
             <img
-              src={event.imageUrl}
+              src={event.image_url || ''}
               alt={event.title}
               className="w-full h-full object-cover low-bandwidth-img transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
@@ -57,7 +59,8 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
         <article className="event-card relative overflow-hidden group-hover:border-primary/30">
           <div className="aspect-[16/9] relative overflow-hidden">
             <img
-              src={event.imageUrl || (event.image as string) || ''}
+                            src={event.image_url || ''}
+
               alt={event.title}
               className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
@@ -119,7 +122,8 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
       <article className="event-card overflow-hidden group-hover:border-primary/30">
         <div className="aspect-[4/3] relative overflow-hidden">
             <img
-            src={event.imageUrl || (event.image as string) || ''}
+                         src={event.image_url || ''}
+
             alt={event.title}
             className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
             loading="lazy"

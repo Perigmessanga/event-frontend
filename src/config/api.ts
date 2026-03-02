@@ -29,13 +29,16 @@ export const ENDPOINTS = {
   
 
 
-  events: {
-    list: '/events/',
-    featured: '/events/?featured=true',
-    detail: (id: string) => `/events/${id}/`,
-    create: '/events/',
-    update: (id: string) => `/events/${id}/`,
-    delete: (id: string) => `/events/${id}/`,
+ events: {
+    list: '/events/',            // GET liste publique / POST création
+    create: '/events/',          // POST création
+    update: (id: string) => `/events/${id}/`,  // PATCH
+    delete: (id: string) => `/events/${id}/`,  // DELETE
+    detail: (id: string) => `/events/${id}/`,  // GET détail
+    publish: (id: string) => `/events/${id}/publish/`,  // POST publish
+    cancel: (id: string) => `/events/${id}/cancel/`,    // POST cancel
+    myEvents: '/events/my_events/',                    // GET mes événements
+    published: '/events/published/',                  // GET événements publiés
   },
 
   users: {

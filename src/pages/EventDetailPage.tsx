@@ -1,13 +1,14 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
+
 import { useState, useEffect } from 'react';
-import { 
-  Calendar, 
-  MapPin, 
-  Clock, 
-  Share2, 
-  Heart, 
-  ArrowLeft, 
-  Users, 
+import {
+  Calendar,
+  MapPin,
+  Clock,
+  Share2,
+  Heart,
+  ArrowLeft,
+  Users,
   Ticket,
   CheckCircle,
   Info,
@@ -18,22 +19,37 @@ import { TicketSelector } from '@/components/events/TicketSelector';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/loading-skeleton';
-import { getEventById } from '@/data/events';
+
 import { formatDate, formatCurrency, getRelativeTime } from '@/lib/format';
 import { cn } from '@/lib/utils';
+import { Event } from "@/types";
+import { useCartStore } from '@/stores/cartStore'; // <-- IMPORT CORRECT
+import { getEventPublicDetail } from '@/data/api/events'; // <-- import Axios API
 
 export default function EventDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
-  
-  const event = id ? getEventById(id) : undefined;
+
+
+
+  const [event, setEvent] = useState<Event | null>(null);
+  const { addItem, getItemByTicketType } = useCartStore();
 
   useEffect(() => {
-    // Simulate loading for smooth transition
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
+    if (!id) return;
+
+    setIsLoading(true);
+
+    getEventPublicDetail(id)
+      .then((data) => setEvent(data))
+      
+      .catch((err) => {
+        console.error(err);
+        setEvent(null);
+      })
+      .finally(() => setIsLoading(false));
   }, [id]);
 
   if (isLoading) {
@@ -93,7 +109,12 @@ export default function EventDetailPage() {
   const totalAvailable = event.ticketTypes.reduce((sum, t) => sum + t.available, 0);
   const relativeTime = getRelativeTime(event.date);
 
+  // --- HANDLE CONTINUE ---
   const handleContinue = () => {
+    event.ticketTypes.forEach(ticket => {
+      const quantity = getItemByTicketType(ticket.id)?.quantity || 0;
+      if (quantity > 0) addItem(event, ticket, quantity);
+    });
     navigate('/checkout');
   };
 
@@ -101,7 +122,7 @@ export default function EventDetailPage() {
     if (navigator.share) {
       await navigator.share({
         title: event.title,
-        text: `Découvrez ${event.title} sur Tikerama`,
+        text: `Découvrez ${event.title} sur Award Dan`,
         url: window.location.href,
       });
     }
@@ -112,12 +133,12 @@ export default function EventDetailPage() {
       {/* Hero Image */}
       <div className="relative h-[45vh] md:h-[55vh] bg-muted overflow-hidden">
         <img
-          src={event.imageUrl}
+          src={event.image_url}
           alt={event.title}
           className="w-full h-full object-cover animate-scale-in"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        
+
         {/* Back Button */}
         <Button
           variant="secondary"
@@ -130,17 +151,17 @@ export default function EventDetailPage() {
 
         {/* Actions */}
         <div className="absolute top-4 right-4 flex gap-2">
-          <Button 
-            variant="secondary" 
-            size="icon" 
+          <Button
+            variant="secondary"
+            size="icon"
             className="shadow-lg glass-strong"
             onClick={handleShare}
           >
             <Share2 className="h-5 w-5" />
           </Button>
-          <Button 
-            variant="secondary" 
-            size="icon" 
+          <Button
+            variant="secondary"
+            size="icon"
             className={cn(
               'shadow-lg glass-strong transition-colors',
               isFavorite && 'text-destructive'
@@ -236,7 +257,7 @@ export default function EventDetailPage() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Organisé par</p>
-                    <p className="font-semibold">{event.organizerName}</p>
+                    <p className="font-semibold">{event.organizer?.username || "Inconnu"}</p>
                   </div>
                 </div>
                 <Button variant="outline" size="sm">
@@ -287,7 +308,7 @@ export default function EventDetailPage() {
                     {formatCurrency(lowestPrice)}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
                   <Ticket className="h-4 w-4" />
                   <span>{totalAvailable} places disponibles</span>

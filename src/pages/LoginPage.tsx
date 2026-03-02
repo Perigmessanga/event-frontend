@@ -28,8 +28,8 @@ const LoginPage = () => {
       await login(formData.email, formData.password);
       toast.success("Connexion réussie !");
       navigate("/");
-    } catch (err: any) {
-      toast.error(err?.message || "Échec de la connexion.");
+    } catch (err: unknown) {
+      toast.error("Échec de la connexion.");
     }
   };
 

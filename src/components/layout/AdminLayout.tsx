@@ -1,5 +1,6 @@
+// src/components/layout/AdminLayout.tsx
 import { useEffect } from 'react';
-import { Outlet, useNavigate, Link } from 'react-router-dom';
+import { Outlet, useNavigate, NavLink } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
 import { XCircle } from 'lucide-react';
@@ -8,19 +9,16 @@ export function AdminLayout() {
   const { user, isAuthenticated, checkAuth, hasRole } = useAuthStore();
   const navigate = useNavigate();
 
-  // Vérifie l'authentification au montage
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  // Redirige si non authentifié
   useEffect(() => {
     if (isAuthenticated === false) {
       navigate('/login');
     }
   }, [isAuthenticated, navigate]);
 
-  // Affiche un loader tant que l'utilisateur n'est pas chargé
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -29,7 +27,6 @@ export function AdminLayout() {
     );
   }
 
-  // Vérifie le rôle
   if (!hasRole(['admin', 'organizer'])) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -41,22 +38,80 @@ export function AdminLayout() {
           <p className="text-muted-foreground mb-6">
             Vous n'avez pas les droits d'accès à cette section.
           </p>
-          <Link to="/">
+          <NavLink to="/">
             <Button>Retour à l'accueil</Button>
-          </Link>
+          </NavLink>
         </div>
       </div>
     );
   }
 
-  // Dashboard pour admin/organizer
+  // Layout Admin avec sidebar
   return (
-    <div className="min-h-screen bg-background">
-      <header className="p-4 bg-card border-b border-border">
-        <h1 className="text-xl font-bold">Bienvenue {user.email}</h1>
-      </header>
+    <div className="flex min-h-screen bg-background">
+      {/* Sidebar */}
+      <aside className="w-64 bg-card border-r border-border p-4 flex flex-col">
+        <h2 className="text-xl font-bold mb-6">Admin Dashboard</h2>
+        <nav className="flex flex-col gap-2">
+          <NavLink
+            to="/admin"
+            end
+            className={({ isActive }) =>
+              `px-3 py-2 rounded ${isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`
+            }
+          >
+            Overview
+          </NavLink>
+          <NavLink
+            to="/admin/events"
+            className={({ isActive }) =>
+              `px-3 py-2 rounded ${isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`
+            }
+          >
+            Événements
+          </NavLink>
+          <NavLink
+            to="/admin/orders"
+            className={({ isActive }) =>
+              `px-3 py-2 rounded ${isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`
+            }
+          >
+            Commandes
+          </NavLink>
+          <NavLink
+            to="/admin/tickets"
+            className={({ isActive }) =>
+              `px-3 py-2 rounded ${isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`
+            }
+          >
+            Tickets
+          </NavLink>
+          <NavLink
+            to="/admin/sales"
+            className={({ isActive }) =>
+              `px-3 py-2 rounded ${isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`
+            }
+          >
+            Ventes
+          </NavLink>
+          <NavLink
+            to="/admin/settings"
+            className={({ isActive }) =>
+              `px-3 py-2 rounded ${isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground'}`
+            }
+          >
+            Paramètres
+          </NavLink>
+        </nav>
+      </aside>
 
-      <main className="p-4">
+      {/* Contenu principal */}
+      <main className="flex-1 p-6 overflow-auto">
+        <header className="mb-6">
+          <h1 className="text-2xl font-bold">Bienvenue {user.email}</h1>
+        </header>
+
+        {/* Ici s'affichent toutes les pages imbriquées via <Outlet /> */}
         <Outlet />
       </main>
     </div>

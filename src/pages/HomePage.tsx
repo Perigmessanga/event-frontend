@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import { Search, ArrowRight, Calendar, MapPin, Sparkles, Star, Zap, Shield, ChevronRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Search, ArrowRight, Zap, Shield, Star, ChevronRight, MapPin, Sparkles } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { EventCard, EventCardSkeleton } from '@/components/events/EventCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { mockEvents, getFeaturedEvents } from '@/data/events';
 import { useNavigate } from 'react-router-dom';
+import { useEventAPI } from '@/hooks/useEventAPI';
+import type { Event } from '@/types';
+import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-
 
 const categories = [
   { id: 'all', label: 'Tous', emoji: '🎉' },
@@ -40,16 +41,31 @@ const features = [
   },
 ];
 
+
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const featuredEvents = getFeaturedEvents();
-  const upcomingEvents = mockEvents
-    .filter(e => e.isPublished)
-    .filter(e => selectedCategory === 'all' || e.category === selectedCategory)
+  const { getAll, isLoading } = useEventAPI();
+  const [events, setEvents] = useState<Event[]>([]);
+
+
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const eventsArray = await getAll(); // ✅ déjà un tableau
+
+      setEvents(eventsArray);
+    };
+
+
+    fetchEvents();
+  }, [getAll]);
+
+  const featuredEvents = events.filter(e => e.isFeatured === true);
+  const upcomingEvents = events
+    .filter(e => e.status && !e.isFeatured)
     .slice(0, 6);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -58,32 +74,27 @@ export default function HomePage() {
       navigate(`/events?search=${encodeURIComponent(searchQuery)}`);
     }
   };
-
-  const handleCategoryChange = (catId: string) => {
-    setIsLoading(true);
-    setSelectedCategory(catId);
-    // Simulate loading for smooth transition
-    setTimeout(() => setIsLoading(false), 300);
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategory(categoryId);
   };
-
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative overflow-hidden gradient-hero py-16 md:py-24 lg:py-32">
+      <section className="  relative overflow-hidden bg-black">
         {/* Background decoration */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* <div className="absolute  inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-1/2 -right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
           <div className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="container mx-auto px-4 relative"
+        </div> */}
+{/* <div></div> */}
+        <div className=" mx-auto px-4 relative"
           style={{
-            backgroundImage: "url('/ed8615300b6a80c98b0fd390c7258211d5d48696.jpg')",
+            backgroundImage: "linear-gradient(rgba(0,0,0, 0.6)), url('/ed8615300b6a80c98b0fd390c7258211d5d48696.jpg')",
             backgroundSize: "cover",        // couvre toute la div
             backgroundPosition: "center",    // centre l'image
             backgroundRepeat: "no-repeat",   // pas de répétition
-            width: "20000px", //toute la largeur disponible
-            height: "748px",           // hauteur fixe
+            // width: "20000px", //toute la largeur disponible
+            // height: "748px",           // hauteur fixe
             gap: "10px",
             opacity: 3,
             padding: "10px",
@@ -97,17 +108,20 @@ export default function HomePage() {
 
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-primary/10 text-black px-5 py-2.5 rounded-full text-sm font-semibold mb-8 animate-fade-in shadow-sm border border-primary/20">
-              <Sparkles className="h-4 w-4" />
-              La billetterie #1 en Côte d'Ivoire
-              <ChevronRight className="h-4 w-4" />
+              <Sparkles className="h-4 w-4 text-white" />
+              <p className='text-white'>
+                La billetterie #1 en Côte d'Ivoire
+
+              </p>
+              <ChevronRight className="text-white h-4 w-4" />
             </div>
 
-            <h1 className="font-display font-bold text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground mb-6 animate-fade-in-up tracking-tight">
+            <h1 className="font-display font-bold text-white text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground mb-6 animate-fade-in-up tracking-tight">
               Vos événements préférés,{' '}
-              <span className="text-gradient">un clic suffit</span>
+              <span className="text-gradient ">un clic suffit</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-black mb-10 max-w-2xl mx-auto animate-fade-in leading-relaxed">
+            <p className="text-lg md:text-xl text-white  mb-10 max-w-2xl mx-auto animate-fade-in leading-relaxed">
               Concerts, festivals, sport, spectacles... Réservez et payez avec Mobile Money en toute simplicité.
             </p>
 
@@ -123,7 +137,7 @@ export default function HomePage() {
                   className="pl-12 h-14 bg-card border-border/50 shadow-md text-base input-premium rounded-xl"
                 />
               </div>
-              <Button type="submit" size="lg" className="h-14 px-8 shadow-md hover:shadow-glow transition-all rounded-xl font-semibold">
+              <Button type="submit" size="lg" className="h-14 px-8 text-white shadow-md hover:shadow-glow transition-all rounded-xl font-semibold">
                 Rechercher
               </Button>
             </form>
@@ -136,8 +150,8 @@ export default function HomePage() {
                 { value: '100%', label: 'Sécurisé' },
               ].map((stat, index) => (
                 <div key={stat.label} className="text-center">
-                  <p className="font-display font-bold text-3xl md:text-4xl text-foreground">{stat.value}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+                  <p className="font-display text-white font-bold text-3xl md:text-4xl text-foreground">{stat.value}</p>
+                  <p className="text-sm text-white text-muted-foreground mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -202,7 +216,7 @@ export default function HomePage() {
                   className="animate-fade-in-up"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <EventCard event={event} variant="featured" />
+                  <EventCard event={{ ...event, image_url: event.image_url || event.image || '/placeholder.jpg' }} />
                 </div>
               ))}
             </div>
@@ -254,7 +268,8 @@ export default function HomePage() {
                   className="animate-fade-in"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <EventCard event={event} />
+                  <EventCard event={{ ...event, image_url: event.image_url || '/placeholder.jpg', }}
+                  />
                 </div>
               ))
             )}

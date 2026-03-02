@@ -22,6 +22,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
 import ContactPage from "./pages/page";
+
 // Admin Layout and Pages
 import { AdminLayout } from "./components/layout/AdminLayout";
 import AdminOverviewPage from "./pages/admin/AdminOverviewPage";
@@ -33,6 +34,7 @@ import AdminRevenuePage from "./pages/admin/AdminRevenuePage";
 import AdminAnalyticsPage from "./pages/admin/AdminAnalyticsPage";
 import AdminTicketTypesPage from "./pages/admin/AdminTicketTypesPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
 
 // User Layout and Pages
 import { UserLayout } from "./components/layout/UserLayout";
@@ -43,6 +45,7 @@ import UserNotificationsPage from "./pages/account/UserNotificationsPage";
 import UserProfilePage from "./pages/account/UserProfilePage";
 import UserSettingsPage from "./pages/account/UserSettingsPage";
 import VerifyOTPForm from "./pages/VerifyOTPForm";
+import AdminTicketsPage from "./pages/admin/AdminTicketsPage";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +64,10 @@ const App = () => (
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/contacts" element={<ContactPage />} />
+         
+
+   
+          
           {/* Protected Routes - Buyer/User */}
           <Route
             path="/checkout"
@@ -123,6 +130,8 @@ const App = () => (
             <Route path="revenue" element={<AdminRevenuePage />} />
             <Route path="analytics" element={<AdminAnalyticsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
+            <Route path="orders" element={<AdminOrdersPage />} />
+            <Route path="tickets" element={<AdminTicketsPage />} />
           </Route>
 
           {/* 404 */}

@@ -57,7 +57,7 @@ export const useCartStore = create<CartStore>()(
           const newItem: CartItem = {
             ticketTypeId: ticketType.id,
             ticketTypeName: ticketType.name,
-            eventId: event.id,
+            eventId: String(event.id),  
             eventTitle: event.title,
             eventDate: event.date,
             quantity: Math.min(quantity, ticketType.maxPerOrder),
