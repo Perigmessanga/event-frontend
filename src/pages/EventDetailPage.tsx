@@ -44,7 +44,7 @@ export default function EventDetailPage() {
 
     getEventPublicDetail(id)
       .then((data) => setEvent(data))
-      
+
       .catch((err) => {
         console.error(err);
         setEvent(null);
@@ -104,9 +104,15 @@ export default function EventDetailPage() {
       </Layout>
     );
   }
+  if (!event) return <div>Chargement...</div>;
+  console.log("TICKETS FRONT:", event.ticketTypes);
+  const lowestPrice =
+    event.ticketTypes && event.ticketTypes.length > 0
+      ? Math.min(...event.ticketTypes.map(t => Number(t.price)))
+      : 0;
 
-  const lowestPrice = Math.min(...event.ticketTypes.map(t => t.price));
-  const totalAvailable = event.ticketTypes.reduce((sum, t) => sum + t.available, 0);
+  const totalAvailable =
+    event.ticketTypes?.reduce((sum, t) => sum + t.available, 0) || 0;
   const relativeTime = getRelativeTime(event.date);
 
   // --- HANDLE CONTINUE ---

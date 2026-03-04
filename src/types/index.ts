@@ -32,7 +32,7 @@ export interface TicketType {
   price: number;
   currency: string;
   available: number;
-  maxPerOrder: number;
+  max_per_order: number;
 }
 
 export interface Event {
@@ -61,6 +61,7 @@ export interface Event {
     id: number | string;
     username?: string;
     email?: string;
+  
   };
   // Ticket types (optional)
   ticketTypes?: TicketType[];
@@ -196,3 +197,9 @@ export const PAYMENT_ENDPOINTS = {
   status: (id: string) => `/payments/${id}/status/`,
   confirm: (id: string) => `/payments/${id}/confirm/`,
 } as const;
+
+export interface EventPublicResponse {
+  event: Event;
+  tickets_available: number;
+  can_book: boolean;
+}

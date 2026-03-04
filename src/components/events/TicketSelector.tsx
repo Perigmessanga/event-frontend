@@ -13,19 +13,23 @@ interface TicketSelectorProps {
 
 export function TicketSelector({ event, onContinue }: TicketSelectorProps) {
   const { addItem, getItemByTicketType, updateQuantity, removeItem } = useCartStore();
-  
-  const [localQuantities, setLocalQuantities] = useState<Record<string, number>>(() => {
-    const initial: Record<string, number> = {};
-    event.ticketTypes.forEach(ticket => {
-      const cartItem = getItemByTicketType(ticket.id);
-      initial[ticket.id] = cartItem?.quantity || 0;
-    });
-    return initial;
+  if (!event || !event.ticketTypes) {
+  return <div>Chargement des billets...</div>;
+}
+ const [localQuantities, setLocalQuantities] = useState<Record<string, number>>(() => {
+  const initial: Record<string, number> = {};
+
+  (event.ticketTypes || []).forEach(ticket => {  // <-- ajout du fallback []
+    const cartItem = getItemByTicketType(ticket.id);
+    initial[ticket.id] = cartItem?.quantity || 0;
   });
+
+  return initial;
+});
 
   const handleQuantityChange = (ticketType: TicketType, delta: number) => {
     const current = localQuantities[ticketType.id] || 0;
-    const newQuantity = Math.max(0, Math.min(current + delta, ticketType.maxPerOrder, ticketType.available));
+    const newQuantity = Math.max(0, Math.min(current + delta, ticketType.max_per_order, ticketType.available));
     
     setLocalQuantities(prev => ({
       ...prev,
@@ -43,7 +47,7 @@ export function TicketSelector({ event, onContinue }: TicketSelectorProps) {
   };
 
   const totalSelected = Object.values(localQuantities).reduce((sum, q) => sum + q, 0);
-  const totalPrice = event.ticketTypes.reduce((sum, ticket) => {
+  const totalPrice = event.ticketTypes?.reduce((sum, ticket) => {
     return sum + (localQuantities[ticket.id] || 0) * ticket.price;
   }, 0);
 
@@ -54,7 +58,7 @@ export function TicketSelector({ event, onContinue }: TicketSelectorProps) {
       </h3>
       
       <div className="space-y-3">
-        {event.ticketTypes.map((ticket, index) => (
+        {event.ticketTypes?.map((ticket, index) => (
           <TicketTypeCard
             key={ticket.id}
             ticket={ticket}
@@ -69,7 +73,7 @@ export function TicketSelector({ event, onContinue }: TicketSelectorProps) {
       {totalSelected > 0 && (
         <div className="bg-muted/50 rounded-xl p-4 space-y-4 animate-fade-in border border-border/50">
           <div className="space-y-2">
-            {event.ticketTypes.map(ticket => {
+            {event.ticketTypes?.map(ticket => {
               const qty = localQuantities[ticket.id] || 0;
               if (qty === 0) return null;
               return (
@@ -153,7 +157,7 @@ function TicketTypeCard({ ticket, quantity, onQuantityChange, style }: TicketTyp
           <p className="text-sm text-muted-foreground mt-1.5 line-clamp-2">{ticket.description}</p>
           <p className="text-xs text-muted-foreground mt-2 flex items-center gap-2">
             <span className="inline-flex items-center gap-1">
-              Max {ticket.maxPerOrder} par commande
+              Max {ticket.max_per_order} par commande
             </span>
             <span>•</span>
             <span>{ticket.available} disponibles</span>
@@ -188,7 +192,7 @@ function TicketTypeCard({ ticket, quantity, onQuantityChange, style }: TicketTyp
                 size="icon"
                 className="h-9 w-9 rounded-lg transition-all"
                 onClick={() => onQuantityChange(1)}
-                disabled={quantity >= ticket.maxPerOrder || quantity >= ticket.available}
+                disabled={quantity >= ticket.max_per_order || quantity >= ticket.available}
               >
                 <Plus className="h-4 w-4" />
               </Button>

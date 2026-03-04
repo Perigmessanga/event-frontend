@@ -49,7 +49,7 @@ export const useCartStore = create<CartStore>()(
           // Update existing item
           newItems = items.map((item, index) =>
             index === existingIndex
-              ? { ...item, quantity: Math.min(item.quantity + quantity, ticketType.maxPerOrder) }
+              ? { ...item, quantity: Math.min(item.quantity + quantity, ticketType.max_Per_Order) }
               : item
           );
         } else {
@@ -60,7 +60,7 @@ export const useCartStore = create<CartStore>()(
             eventId: String(event.id),  
             eventTitle: event.title,
             eventDate: event.date,
-            quantity: Math.min(quantity, ticketType.maxPerOrder),
+            quantity: Math.min(quantity, ticketType.max_Per_Order),
             unitPrice: ticketType.price,
             currency: ticketType.currency,
           };
