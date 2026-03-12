@@ -9,14 +9,16 @@ import { formatCurrency, formatPhoneNumber, isValidPhoneNumber } from '@/lib/for
 import { MOMO_PROVIDERS } from '@/config/api';
 import type { PaymentProvider } from '@/types';
 import { cn } from '@/lib/utils';
+import { PaymentAWDPAYButton } from '@/components/payment/PaymentAWDPAYButton';
 
 interface PaymentFlowProps {
-  onSuccess?: () => void;
+  onSuccess: () => void;
   onBack?: () => void;
+  currentOrder: { id: string } | null; // <- C’est ça qui manquait
 }
 
-export function PaymentFlow({ onSuccess, onBack }: PaymentFlowProps) {
-  const { total, currency } = useCartStore();
+export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProps) {
+  const { total } = useCartStore();
   const {
     status,
     error,
@@ -49,7 +51,7 @@ export function PaymentFlow({ onSuccess, onBack }: PaymentFlowProps) {
       return;
     }
 
-    await initiatePayment(selectedProvider, phoneNumber, total);
+    await initiatePayment(selectedProvider, phoneNumber, total, "XOF");
   };
 
   const handleCheckStatus = async () => {
@@ -67,20 +69,20 @@ export function PaymentFlow({ onSuccess, onBack }: PaymentFlowProps) {
   };
 
   // Render based on payment status
-  if (status === 'pending' || status === 'processing') {
-    return (
-      <PaymentPending
-        provider={selectedProvider!}
-        phoneNumber={phoneNumber}
-        amount={total}
-        transactionId={transactionId}
-        reference={reference}
-        isProcessing={status === 'processing'}
-        onCheckStatus={handleCheckStatus}
-        onCancel={handleReset}
-      />
-    );
-  }
+  if ((status === 'pending' || status === 'processing') && selectedProvider) {
+  return (
+    <PaymentPending
+      provider={selectedProvider}
+      phoneNumber={phoneNumber}
+      amount={total}
+      transactionId={transactionId}
+      reference={reference}
+      isProcessing={status === 'processing'}
+      onCheckStatus={handleCheckStatus}
+      onCancel={handleReset}
+    />
+  );
+}
 
   if (status === 'success') {
     return <PaymentSuccess onContinue={onSuccess} />;
@@ -141,6 +143,13 @@ export function PaymentFlow({ onSuccess, onBack }: PaymentFlowProps) {
         </div>
       </div>
 
+  {/* AWDPAY Button */}
+  {selectedProvider === null && currentOrder && (
+    <div className="mt-4">
+      <PaymentAWDPAYButton orderId={currentOrder.id} amount={total} />
+    </div>
+  )}
+
       {/* Phone Number Input */}
       {selectedProvider && (
         <div className="space-y-3 animate-fade-in">
@@ -181,19 +190,16 @@ export function PaymentFlow({ onSuccess, onBack }: PaymentFlowProps) {
 
       {/* Submit Button */}
       <Button
-        className="w-full"
-        size="lg"
-        disabled={!selectedProvider || !phoneNumber || status === 'initiating'}
-        onClick={handleSubmit}
-      >
-        {status === 'initiating' ? (
-          <>
-            <Loader2 className="h-5 w-5 animate-spin mr-2" />
-            Initiation en cours...
-          </>
-        ) : (
-          `Payer ${formatCurrency(total)}`
-        )}
+  className="w-full"
+  size="lg"
+  disabled={
+    !selectedProvider ||
+    !phoneNumber ||
+    !isValidPhoneNumber(phoneNumber) ||
+    status === 'initiating'
+  }
+  onClick={handleSubmit}
+>
       </Button>
 
       {/* Security Note */}

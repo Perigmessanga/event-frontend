@@ -52,3 +52,13 @@ export interface AdvancedSales {
   monthly_sales: MonthlySale[];
   ticket_distribution: TicketDistribution[];
 }
+export interface AdminTicketType {
+  id: number;
+  event: number;
+  event_title: string;
+  name: string;
+  price: string;
+  quantity_total: number;
+  quantity_sold: number;
+  max_per_order: number;
+}

@@ -4,10 +4,10 @@
  * Configuration générale de l'API
  */
 export const API_CONFIG = {
-  baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1',
-  timeout: 30000,       // timeout en ms
-  retryAttempts: 3,     // nombre de tentatives pour les requêtes
-  retryDelay: 1000,     // délai entre les tentatives en ms
+  baseUrl: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1',
+  timeout: 30000,
+  retryAttempts: 3,
+  retryDelay: 1000,
 } as const;
 
 /**

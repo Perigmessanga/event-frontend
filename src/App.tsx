@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PaymentFailedPage  from '@/pages/PaymentFailedPage';
 
 
 
@@ -64,6 +65,8 @@ const App = () => (
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/contacts" element={<ContactPage />} />
+          <Route path="paiement/success" element={<PaymentSuccessPage />} />
+          <Route path="paiement/echec"   element={<PaymentFailedPage />} />
          
 
    
@@ -109,6 +112,7 @@ const App = () => (
             <Route path="notifications" element={<UserNotificationsPage />} />
             <Route path="profile" element={<UserProfilePage />} />
             <Route path="settings" element={<UserSettingsPage />} />
+            
           </Route>
 
           {/* Protected Routes - Admin */}
@@ -132,6 +136,7 @@ const App = () => (
             <Route path="settings" element={<AdminSettingsPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="tickets" element={<AdminTicketsPage />} />
+            
           </Route>
 
           {/* 404 */}

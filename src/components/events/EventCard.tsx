@@ -30,8 +30,8 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
         <article className="event-card flex gap-4 p-4 group-hover:border-primary/30">
           <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
             <img
-              src={event.image_url || ''}
-              alt={event.title}
+               src={event.image ? `${import.meta.env.VITE_API_URL}${event.image}` : '/placeholder.jpg'}
+  alt={event.title}
               className="w-full h-full object-cover low-bandwidth-img transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
             />
@@ -59,9 +59,8 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
         <article className="event-card relative overflow-hidden group-hover:border-primary/30">
           <div className="aspect-[16/9] relative overflow-hidden">
             <img
-                            src={event.image_url || ''}
-
-              alt={event.title}
+                             src={event.image ? `${import.meta.env.VITE_API_URL}${event.image}` : '/placeholder.jpg'}
+  alt={event.title}
               className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
               loading="lazy"
             />
@@ -122,9 +121,8 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
       <article className="event-card overflow-hidden group-hover:border-primary/30">
         <div className="aspect-[4/3] relative overflow-hidden">
             <img
-                         src={event.image_url || ''}
-
-            alt={event.title}
+                          src={event.image ? `${import.meta.env.VITE_API_URL}${event.image}` : '/placeholder.jpg'}
+  alt={event.title}
             className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
             loading="lazy"
           />
