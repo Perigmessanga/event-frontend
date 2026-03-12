@@ -54,7 +54,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const eventsArray = await getAll(); // ✅ déjà un tableau
+      const eventsArray = await getAll(); //  déjà un tableau
 
       setEvents(eventsArray);
     };

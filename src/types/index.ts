@@ -37,7 +37,7 @@ export interface TicketType {
 
 export interface Event {
   image_url: string;
-  id: string | number;
+  id: number;
   title: string;
   description: string;
   // Legacy / display fields (frontend)

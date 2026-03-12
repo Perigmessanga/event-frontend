@@ -26,7 +26,7 @@ export const getEventPublicDetail = async (eventId: string | number): Promise<Ev
       date: data.start_date,                  // Renommage start_date → date
       endDate: data.end_date,                 // Renommage end_date → endDate
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Erreur lors de la récupération de l'événement :", error);
     throw error;
   }
