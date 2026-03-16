@@ -66,24 +66,38 @@ export default function CreateEventPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const startDateTime = new Date(`${formData.start_date}T${formData.start_time}`).toISOString();
-    const endDateTime = new Date(`${formData.end_date}T${formData.end_time}`).toISOString();
+    try {
+      const startDateTime = new Date(`${formData.start_date}T${formData.start_time}`).toISOString();
+      const endDateTime = new Date(`${formData.end_date}T${formData.end_time}`).toISOString();
 
-    const eventData = {
-      title: formData.title,
-      description: formData.description,
-      location: formData.location,
-      start_date: startDateTime,
-      end_date: endDateTime,
-      capacity: parseInt(formData.capacity),
-      ticket_price: parseFloat(formData.ticket_price),
-      status: formData.status as 'draft' | 'published' | 'cancelled' | 'completed',
-      ...(imageFile && { image: imageFile }),
-    };
+      const eventData = {
+        title: formData.title,
+        description: formData.description,
+        location: formData.location,
+        start_date: startDateTime,
+        end_date: endDateTime,
+        capacity: parseInt(formData.capacity),
+        ticket_price: parseFloat(formData.ticket_price),
+        status: formData.status as 'draft' | 'published' | 'cancelled' | 'completed',
+        ...(imageFile && { image: imageFile }),
+      };
 
-    const result = await create(eventData);
-    if (result) {
-      navigate('/admin/events');
+      console.log('[DEBUG] eventData à envoyer:', eventData);
+
+      const result = await create(eventData);
+
+      console.log('[DEBUG] Résultat création événement:', result);
+
+      if (result) {
+        navigate('/admin/events');
+      }
+    } catch (error) {
+      console.error('[ERROR] Échec création événement:', error);
+      toast({
+        title: 'Erreur création événement',
+        description: error instanceof Error ? error.message : 'Erreur inconnue',
+        variant: 'destructive',
+      });
     }
   };
 

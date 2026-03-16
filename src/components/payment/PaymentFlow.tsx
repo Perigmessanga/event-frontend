@@ -19,6 +19,7 @@ interface PaymentFlowProps {
 
 export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProps) {
   const { total } = useCartStore();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const {
     status,
     error,
@@ -59,7 +60,7 @@ export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProp
   try {
     // Si le param currency doit être number, mets 1 ou la valeur correspondante
     // sinon change le type de initiatePayment pour accepter string
-    await initiatePayment(selectedProvider, phoneNumber, total, currentOrder.id);
+    await initiatePayment(selectedProvider, phoneNumber, total, Number(currentOrder.id));
   } catch (err) {
     console.error(err);
   }
@@ -74,9 +75,11 @@ export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProp
 
   // Render based on payment status
   if ((status === 'pending' || status === 'processing') && selectedProvider) {
-    function handleCheckStatus(): void {
-      throw new Error('Function not implemented.');
-    }
+    const handleCheckStatus = async () => {
+  if (transactionId) {
+    await checkPaymentStatus();
+  }
+};
 
   return (
     <PaymentPending
@@ -154,7 +157,11 @@ export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProp
   {/* AWDPAY Button */}
   {selectedProvider === null && currentOrder && (
     <div className="mt-4">
-      <PaymentAWDPAYButton orderId={currentOrder.id} amount={total} />
+      <PaymentAWDPAYButton
+  orderId={currentOrder.id}
+  amount={total}
+  customerEmail={user.email}
+/>
     </div>
   )}
 
@@ -208,6 +215,7 @@ export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProp
   }
   onClick={handleSubmit}
 >
+  Payer {formatCurrency(total)}
       </Button>
 
       {/* Security Note */}

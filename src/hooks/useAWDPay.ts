@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import { API_CONFIG, ENDPOINTS } from "@/config/api";
 
 interface InitiatePaymentProps {
   orderId: string;
@@ -11,7 +12,7 @@ interface InitiatePaymentProps {
 
 interface AWDPayResponse {
   checkoutUrl?: string;
-  [key: string]: any; // si AWDPAY retourne d'autres champs
+  [key: string]: any;
 }
 
 export const useAWDPay = () => {
@@ -23,16 +24,17 @@ export const useAWDPay = () => {
     setError(null);
 
     try {
-      const token = localStorage.getItem("access_token"); // ou ton store auth
+      const token = localStorage.getItem("access_token");
+
       const res = await axios.post<{
         payment: object;
         awdpay: AWDPayResponse;
       }>(
-        "http://127.0.0.1:8000/api/v1/payments/initiate/",
+        `${API_CONFIG.baseUrl}${ENDPOINTS.payments.initiate}`,
         data,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            ...(token && { Authorization: `Bearer ${token}` }),
             "Content-Type": "application/json",
           },
         }

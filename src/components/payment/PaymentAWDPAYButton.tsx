@@ -8,6 +8,7 @@ import { useState } from "react";
 interface PaymentAWDPAYButtonProps {
   orderId: string; // ID de la commande
   amount: number;  // montant à payer
+  customerEmail: string;
 }
 
 export function PaymentAWDPAYButton({ orderId, amount }: PaymentAWDPAYButtonProps) {
