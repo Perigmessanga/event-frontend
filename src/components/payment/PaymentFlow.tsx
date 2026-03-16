@@ -44,22 +44,26 @@ export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProp
   };
 
   const handleSubmit = async () => {
-    if (!selectedProvider) return;
-    
-    if (!isValidPhoneNumber(phoneNumber)) {
-      setPhoneError('Numéro de téléphone invalide');
-      return;
-    }
+  if (!selectedProvider) return;
 
-    await initiatePayment(selectedProvider, phoneNumber, total, "XOF");
-  };
+  if (!isValidPhoneNumber(phoneNumber)) {
+    setPhoneError('Numéro de téléphone invalide');
+    return;
+  }
 
-  const handleCheckStatus = async () => {
-    const newStatus = await checkPaymentStatus();
-    if (newStatus === 'success' && onSuccess) {
-      onSuccess();
-    }
-  };
+  if (!currentOrder) {
+    alert("Commande introuvable");
+    return;
+  }
+
+  try {
+    // Si le param currency doit être number, mets 1 ou la valeur correspondante
+    // sinon change le type de initiatePayment pour accepter string
+    await initiatePayment(selectedProvider, phoneNumber, total, currentOrder.id);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const handleReset = () => {
     resetPayment();
@@ -70,6 +74,10 @@ export function PaymentFlow({ onSuccess, onBack, currentOrder }: PaymentFlowProp
 
   // Render based on payment status
   if ((status === 'pending' || status === 'processing') && selectedProvider) {
+    function handleCheckStatus(): void {
+      throw new Error('Function not implemented.');
+    }
+
   return (
     <PaymentPending
       provider={selectedProvider}

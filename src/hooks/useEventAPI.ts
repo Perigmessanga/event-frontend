@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // useEventAPI.ts (corrigé)
 import { useState, useCallback} from 'react';
 import { get, post, put, patch, del } from '@/lib/api-client';

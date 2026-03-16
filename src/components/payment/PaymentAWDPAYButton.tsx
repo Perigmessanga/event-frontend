@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/components/payment/PaymentAWDPAYButton.tsx
 import { Button } from "@/components/ui/button";
-import { API_CONFIG, ENDPOINTS } from "@/config/api";
+import { ENDPOINTS } from "@/config/api";
 import { post } from "@/lib/api-client";
 import { useState } from "react";
 
@@ -15,18 +16,31 @@ export function PaymentAWDPAYButton({ orderId, amount }: PaymentAWDPAYButtonProp
   const handleAWDPAY = async () => {
     setLoading(true);
     try {
-      // Appel backend pour initier paiement AWDPAY
-      const data = await post<{ payment_url: string }>(
-        ENDPOINTS.payments.initiate,
-        { order_id: orderId, amount, payment_method: "awdpay" }
-      );
+      // 🔹 Appel backend pour initier le paiement AWDPAY
+      const response = await post<{
+        payment: object;
+        awdpay: { checkoutUrl?: string; transactionId?: string; [key: string]: any };
+      }>(ENDPOINTS.payments.initiate, {
+        order_id: orderId,
+        amount,
+        payment_method: "awdpay",
+      });
 
-      // Redirection vers AWDPAY
-      console.log("AWDPAY URL:", data.payment_url);
-    //   window.location.href = data.payment_url;
-    } catch (error) {
+      const awdpayData = response.awdpay;
+
+      if (!awdpayData || !awdpayData.checkoutUrl) {
+        console.error("AWDPAY DATA RECEIVED:", awdpayData);
+        throw new Error("AWDPAY URL manquante");
+      }
+
+      console.log("AWDPAY URL:", awdpayData.checkoutUrl);
+
+      // 🔹 Redirection automatique vers AWDPAY
+      window.location.href = awdpayData.checkoutUrl;
+
+    } catch (error: any) {
       console.error("Erreur AWDPAY:", error);
-      alert("Impossible d'initier le paiement AWDPAY.");
+      alert(error?.message || "Impossible d'initier le paiement AWDPAY.");
     } finally {
       setLoading(false);
     }

@@ -1,13 +1,13 @@
 import type { Event } from '@/types';
 
 export const getEventById = (id: string) => {
-  return mockEvents.find(event => event.id === id);
+  return mockEvents.find(event => event.id === parseInt(id));
 };
 
 // Mock events data for Côte d'Ivoire
 export const mockEvents: Event[] = [
   {
-    id: 'evt-001',
+    id: 25,
     title: "Festival des Musiques Urbaines d'Anoumabo",
     shortDescription: "Le plus grand festival de musique urbaine en Côte d'Ivoire",
     description: `Le FEMUA revient pour sa 15ème édition avec une programmation exceptionnelle réunissant les plus grandes stars de la musique africaine et internationale.
@@ -58,7 +58,7 @@ Au programme : concerts live, DJ sets, espaces restauration, village artisanal e
     ],
   },
   {
-    id: 'evt-002',
+    id: 26,
     title: 'Abidjan Comedy Club',
     shortDescription: "Soirée stand-up avec les meilleurs humoristes ivoiriens",
     description: `Une soirée de rires garantie avec les stars de l'humour ivoirien !

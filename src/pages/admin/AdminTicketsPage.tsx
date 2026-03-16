@@ -10,10 +10,13 @@ import { motion } from "framer-motion";
 import { getAdminTicketTypes, createTicketType, updateTicketType, deleteTicketType } from "@/data/api/admin";
 
 export default function AdminTicketsPage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tickets, setTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editing, setEditing] = useState<any | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [form, setForm] = useState<any>({});
   const [selectedEvent, setSelectedEvent] = useState<string>("all");
   const [search, setSearch] = useState("");

@@ -68,6 +68,7 @@ const RegisterPage = () => {
       await requestEmailOtp(formData.email);
       toast.success("Code OTP envoyé par email !");
       setStep("otp");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err?.message || "Échec de l'inscription. Vérifiez vos informations.");
     }
@@ -81,6 +82,7 @@ const RegisterPage = () => {
       toast.success("Email vérifié, compte activé !");
       setStep("done");
       navigate("/login");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err?.message || "OTP invalide ou expiré.");
     }

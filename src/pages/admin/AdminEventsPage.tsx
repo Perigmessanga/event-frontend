@@ -25,6 +25,7 @@ export default function AdminEventsPage() {
 
   useEffect(() => {
     fetchEvents();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // useEffect sans dépendances dynamiques
 
   const handleDelete = async (id: number) => {

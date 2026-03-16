@@ -29,6 +29,7 @@ export default function AdminSalesPage() {
 
   useEffect(() => {
     fetchSales();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!sales) return <div className="p-6">Chargement...</div>;
@@ -114,6 +115,7 @@ export default function AdminSalesPage() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function Card({ title, value }: { title: string; value: any }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow">

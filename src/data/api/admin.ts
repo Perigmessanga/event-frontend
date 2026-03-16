@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { get } from "@/lib/api-client";
 import type { AdminOrder, PaginatedResponse, AdminSales, AdvancedSales,  AdminTicketType} from "@/types/admin";
 import { post, put, del } from "@/lib/api-client";

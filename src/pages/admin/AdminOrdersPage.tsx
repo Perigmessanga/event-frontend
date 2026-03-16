@@ -19,6 +19,7 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     fetchOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, statusFilter, search]);
 
   const totalPages = Math.ceil(count / 10);

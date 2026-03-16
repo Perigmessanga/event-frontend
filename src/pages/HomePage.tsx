@@ -1,3 +1,6 @@
+import { useRef } from "react";
+import { ChevronLeft } from "lucide-react";
+
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Search, ArrowRight, Zap, Shield, Star, ChevronRight, MapPin, Sparkles } from 'lucide-react';
@@ -50,6 +53,18 @@ export default function HomePage() {
   const { getAll, isLoading } = useEventAPI();
   const [events, setEvents] = useState<Event[]>([]);
 
+const carouselRef = useRef<HTMLDivElement | null>(null);
+
+const scrollCarousel = (direction: "left" | "right") => {
+  if (!carouselRef.current) return;
+
+  const scrollAmount = carouselRef.current.offsetWidth;
+
+  carouselRef.current.scrollBy({
+    left: direction === "left" ? -scrollAmount : scrollAmount,
+    behavior: "smooth",
+  });
+};
 
 
   useEffect(() => {
@@ -255,25 +270,58 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Events Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {isLoading ? (
-              Array.from({ length: 6 }).map((_, i) => (
-                <EventCardSkeleton key={i} />
-              ))
-            ) : (
-              upcomingEvents.map((event, index) => (
-                <div
-                  key={event.id}
-                  className="animate-fade-in"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <EventCard event={{ ...event, image_url: event.image_url || '/placeholder.jpg', }}
-                  />
-                </div>
-              ))
-            )}
-          </div>
+          {/* Events Carousel */}
+<div className="relative">
+
+  {/* Left Arrow */}
+  <button
+    onClick={() => scrollCarousel("left")}
+    className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-white border border-border shadow-lg rounded-full p-3 hover:scale-105 transition hidden md:flex"
+  >
+    <ChevronLeft className="h-5 w-5" />
+  </button>
+
+  {/* Carousel Container */}
+  <div
+    ref={carouselRef}
+    className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-4 scrollbar-hide"
+  >
+    {isLoading ? (
+      Array.from({ length: 6 }).map((_, i) => (
+        <div
+          key={i}
+          className="snap-start flex-shrink-0 w-[85%] sm:w-[48%] lg:w-[32%]"
+        >
+          <EventCardSkeleton />
+        </div>
+      ))
+    ) : (
+      upcomingEvents.map((event, index) => (
+        <div
+          key={event.id}
+          className="snap-start flex-shrink-0 w-[85%] sm:w-[48%] lg:w-[32%] animate-fade-in"
+          style={{ animationDelay: `${index * 50}ms` }}
+        >
+          <EventCard
+            event={{
+              ...event,
+              image_url: event.image_url || "/placeholder.jpg",
+            }}
+          />
+        </div>
+      ))
+    )}
+  </div>
+
+  {/* Right Arrow */}
+  <button
+    onClick={() => scrollCarousel("right")}
+    className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-white border border-border shadow-lg rounded-full p-3 hover:scale-105 transition hidden md:flex"
+  >
+    <ChevronRight className="h-5 w-5" />
+  </button>
+
+</div>
 
           {/* View All Button */}
           <div className="text-center mt-12">
