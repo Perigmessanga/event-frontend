@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { ChevronLeft } from "lucide-react";
+import { Calendar, ChevronLeft } from "lucide-react";
 
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { useEventAPI } from '@/hooks/useEventAPI';
 import type { Event } from '@/types';
-import { Calendar } from '@/components/ui/calendar';
+
 import { cn } from '@/lib/utils';
 
 const categories = [

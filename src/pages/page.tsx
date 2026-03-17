@@ -5,7 +5,7 @@ import { useState, forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Phone, Globe, Send } from "lucide-react";
+import { Mail, Phone, Globe, Send, MousePointer } from "lucide-react";
 
 import { Header } from "@/components/layout/Header";
 
@@ -64,16 +64,21 @@ export default function ContactPage() {
         {/* LEFT SIDE */}
         <div className="space-y-6">
           <ContactCard icon={<Mail />} title="Email">
-            support@awdtech.com
+            williamsmahan@gmail.com
           </ContactCard>
 
-          <ContactCard icon={<Phone />} title="Cameroun">
-            +237 656 849 690 <br /> +237 653 624 318
+          <ContactCard icon={<Phone />} title="Cote d'Ivoire">
+            +225 0564295355 <br /> 
+          </ContactCard>
+          <ContactCard icon={<MousePointer />} title="toujours ouvert">
+             <br /> 
           </ContactCard>
 
-          <ContactCard icon={<Phone />} title="Côte d'Ivoire">
-            +225 27 24 3 73010 <br /> +225 27 24 3 73317
+          <ContactCard icon={<Globe />} title="Abidjan, cote d'ivoire, 225">
+             <br /> 
           </ContactCard>
+
+          
 
           <ContactCard icon={<Globe />} title="Service">
             Numérique partout dans le monde

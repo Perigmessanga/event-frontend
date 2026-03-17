@@ -62,14 +62,17 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center shadow-glow transition-transform duration-300 group-hover:scale-105">
-              <span className="text-primary-foreground font-display font-bold text-lg">AD</span>
-            </div>
-            <span className="font-display font-bold text-xl text-yellow-500">
-              Award Dan
-            </span>
-          </Link>
+         <div className=" w-full bg-white z-50 flex items-center px-4 py-2 shadow-md">
+  <img src="/award dan.jpg" alt="AWDPAY" className="h-10 w-10 mr-2" />
+  <span className="font-bold text-lg">AWDPAY</span>
+
+  {/* Menu */}
+  <nav className="ml-auto flex gap-4">
+    <Link to="/about">À propos</Link>
+    
+    
+  </nav>
+</div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
@@ -123,10 +126,10 @@ export function Header() {
                   >
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
                       <span className="text-primary-foreground text-xs font-semibold">
-                        {user?.first_Name?.charAt(0)?.toUpperCase()}
+                        {user?.first_name?.charAt(0)?.toUpperCase()}
                       </span>
                     </div>
-                    <span className="max-w-[100px] truncate font-medium">{user?.firstName}</span>
+                    <span className="max-w-[100px] truncate font-medium">{user?.first_name}</span>
                     <ChevronDown className="h-4 w-4 text-muted-foreground" />
                   </Button>
                 </Link>
@@ -213,11 +216,11 @@ export function Header() {
                   <div className="px-4 py-2 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
                       <span className="text-primary-foreground text-sm font-semibold">
-                        {user?.firstName?.charAt(0)?.toUpperCase()}
+                        {user?.first_name?.charAt(0)?.toUpperCase()}
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium text-sm">{user?.firstName} {user?.lastName}</p>
+                      <p className="font-medium text-sm">{user?.first_name} {user?.last_name}</p>
                       <p className="text-xs text-muted-foreground">{user?.email}</p>
                     </div>
                   </div>
