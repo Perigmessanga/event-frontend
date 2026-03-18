@@ -30,11 +30,11 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
         <article className="event-card flex gap-4 p-4 group-hover:border-primary/30">
           <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-muted">
             <img
-               src={event.image ? `${import.meta.env.VITE_API_URL}${event.image}` : '/placeholder.jpg'}
+  src={event.image_url || '/placeholder.jpg'}
   alt={event.title}
-              className="w-full h-full object-cover low-bandwidth-img transition-transform duration-500 group-hover:scale-110"
-              loading="lazy"
-            />
+  className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
+  loading="lazy"
+/>
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-sm line-clamp-1 group-hover:text-primary transition-colors">
@@ -59,11 +59,11 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
         <article className="event-card relative overflow-hidden group-hover:border-primary/30">
           <div className="aspect-[16/9] relative overflow-hidden">
             <img
-                             src={event.image ? `${import.meta.env.VITE_API_URL}${event.image}` : '/placeholder.jpg'}
+  src={event.image_url || '/placeholder.jpg'}
   alt={event.title}
-              className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
-              loading="lazy"
-            />
+  className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
+  loading="lazy"
+/>
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
             
             {/* Badges */}
@@ -121,11 +121,11 @@ export function EventCard({ event, variant = 'default', className }: EventCardPr
       <article className="event-card overflow-hidden group-hover:border-primary/30">
         <div className="aspect-[4/3] relative overflow-hidden">
             <img
-                          src={event.image ? `${import.meta.env.VITE_API_URL}${event.image}` : '/placeholder.jpg'}
+  src={event.image_url || '/placeholder.jpg'}
   alt={event.title}
-            className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
-            loading="lazy"
-          />
+  className="w-full h-full object-cover low-bandwidth-img transition-transform duration-700 group-hover:scale-105"
+  loading="lazy"
+/>
           {/* Gradient overlay on hover */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
