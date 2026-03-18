@@ -414,25 +414,24 @@ const scrollCarousel = (direction: "left" | "right") => {
             </div>
 
             <h2 className="font-display font-bold text-3xl md:text-4xl mb-4">
-              Payez avec Mobile Money
+              Payez avec AWDPAY
             </h2>
             <p className="text-muted-foreground mb-10 max-w-lg mx-auto">
-              Nous acceptons tous les principaux opérateurs Mobile Money en Côte d'Ivoire
+              Nous acceptons de payer par AWDPAY
             </p>
 
             <div className="flex justify-center gap-4 flex-wrap">
               {[
-                { name: 'Orange Money', class: 'momo-orange', letter: 'O' },
-                { name: 'MTN MoMo', class: 'momo-mtn', letter: 'M' },
-                { name: 'Wave', class: 'momo-wave', letter: 'W' },
+                { name: 'awdpay', class: 'awdpay', letter: '' },
+                
               ].map((provider) => (
-                <div
-                  key={provider.name}
-                  className={cn(
-                    'flex items-center gap-3 px-6 py-4 rounded-2xl shadow-lg hover-lift cursor-default',
-                    provider.class
-                  )}
-                >
+               <div
+  key={provider.name}
+  className={cn(
+    'flex items-center gap-3 px-6 py-4 rounded-2xl shadow-lg cursor-default transition',
+    provider.class === 'awdpay' && 'bg-orange-500 text-white hover:bg-orange-600'
+  )}
+>
                   <span className="text-2xl font-display font-bold">{provider.letter}</span>
                   <span className="font-semibold">{provider.name}</span>
                 </div>

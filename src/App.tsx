@@ -4,6 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PaymentFailedPage  from '@/pages/PaymentFailedPage';
+import AboutPage from "@/pages/about";
+
+
 
 
 
@@ -67,6 +70,7 @@ const App = () => (
           <Route path="/contacts" element={<ContactPage />} />
           <Route path="paiement/success" element={<PaymentSuccessPage />} />
           <Route path="paiement/echec"   element={<PaymentFailedPage />} />
+          <Route path="/about" element={<AboutPage />} />
          
 
    
