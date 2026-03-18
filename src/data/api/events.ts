@@ -1,6 +1,7 @@
 // src/data/api/events.ts
 import axios from "axios";
 import type { Event } from '@/types';
+import { API_CONFIG } from "@/config/api";
 
 /**
  * Récupère les détails publics d'un événement depuis le backend
@@ -10,7 +11,7 @@ import type { Event } from '@/types';
 export const getEventPublicDetail = async (eventId: string | number): Promise<Event> => {
   try {
     const response = await axios.get(
-      `http://127.0.0.1:8000/api/v1/events/${eventId}/public_detail/`
+      `${API_CONFIG.baseUrl}/events/${eventId}/public_detail/`
     );
 
     const data = response.data.event;
