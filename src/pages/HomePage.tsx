@@ -132,9 +132,11 @@ const scrollCarousel = (direction: "left" | "right") => {
             </div>
 
             <h1 className="font-display font-bold text-white text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-foreground mb-6 animate-fade-in-up tracking-tight">
-              Vos événements préférés,{' '}
-              <span className="text-gradient ">un clic suffit</span>
-            </h1>
+  Vos événements préférés,{' '}
+  <span className="bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#C9A227] bg-clip-text text-transparent">
+    un clic suffit
+  </span>
+</h1>
 
             <p className="text-lg md:text-xl text-white  mb-10 max-w-2xl mx-auto animate-fade-in leading-relaxed">
               Concerts, festivals, sport, spectacles... Réservez et payez avec Mobile Money en toute simplicité.
@@ -152,9 +154,13 @@ const scrollCarousel = (direction: "left" | "right") => {
                   className="pl-12 h-14 bg-card border-border/50 shadow-md text-base input-premium rounded-xl"
                 />
               </div>
-              <Button type="submit" size="lg" className="h-14 px-8 text-white shadow-md hover:shadow-glow transition-all rounded-xl font-semibold">
-                Rechercher
-              </Button>
+              <Button
+  type="submit"
+  size="lg"
+  className="h-14 px-8 bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#C9A227] text-black shadow-md hover:opacity-90 transition-all rounded-xl font-semibold"
+>
+  Rechercher
+</Button>
             </form>
 
             {/* Quick Stats */}
@@ -246,9 +252,15 @@ const scrollCarousel = (direction: "left" | "right") => {
             <h2 className="font-display font-bold text-3xl md:text-4xl mb-4">
               Événements à venir
             </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">
-              Découvrez les meilleurs événements près de chez vous
-            </p>
+            <Link to="/events">
+  <Button
+    size="lg"
+    className="px-8 bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#C9A227] text-black shadow-md hover:opacity-90 transition-all gap-2"
+  >
+    Découvrir les événements
+    <ArrowRight className="h-4 w-4" />
+  </Button>
+</Link>
           </div>
 
           {/* Category Pills */}
@@ -335,69 +347,31 @@ const scrollCarousel = (direction: "left" | "right") => {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* Comment ça marche */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-secondary mb-2 uppercase tracking-wide">Simple & Rapide</p>
-            <h2 className="font-display font-bold text-3xl md:text-4xl mb-4">
-              Comment ça marche ?
-            </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">
-              Réservez vos billets en 3 étapes simples
-            </p>
+            <h2 className="font-display font-bold text-3xl md:text-4xl mb-4">Comment ça marche ?</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">Réservez vos billets en 3 étapes simples</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
             {[
-              {
-                icon: Search,
-                step: '01',
-                title: 'Trouvez',
-                description: 'Parcourez notre sélection d\'événements et choisissez celui qui vous plaît',
-                gradient: 'gradient-primary',
-              },
-              {
-                icon: Calendar,
-                step: '02',
-                title: 'Réservez',
-                description: 'Sélectionnez vos billets et payez en toute sécurité avec Mobile Money',
-                gradient: 'gradient-teal',
-              },
-              {
-                icon: MapPin,
-                step: '03',
-                title: 'Profitez',
-                description: 'Recevez votre billet avec QR code et présentez-le à l\'entrée',
-                gradient: 'bg-success',
-              },
+              { icon: Search, step: '01', title: 'Trouvez', description: "Parcourez notre sélection d'événements et choisissez celui qui vous plaît", gradient: 'bg-[#FFD700]' },
+              { icon: Calendar, step: '02', title: 'Réservez', description: 'Sélectionnez vos billets et payez en toute sécurité avec Mobile Money', gradient: 'gradient-teal' },
+              { icon: MapPin, step: '03', title: 'Profitez', description: "Recevez votre billet avec QR code et présentez-le à l'entrée", gradient: 'bg-success' },
             ].map((item, index) => (
-              <div
-                key={item.step}
-                className="relative text-center group animate-fade-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Connector line */}
-                {index < 2 && (
-                  <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-border via-border to-transparent" />
-                )}
-
+              <div key={item.step} className="relative text-center group animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                {index < 2 && <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-[2px] bg-gradient-to-r from-border via-border to-transparent" />}
                 <div className="relative inline-block mb-6">
-                  <div className={cn(
-                    'w-24 h-24 rounded-3xl flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-105',
-                    item.gradient
-                  )}>
+                  <div className={cn('w-24 h-24 rounded-3xl flex items-center justify-center mx-auto transition-transform duration-300 group-hover:scale-105', item.gradient)}>
                     <item.icon className="h-10 w-10 text-white" />
                   </div>
-                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-card border-2 border-border text-sm font-bold flex items-center justify-center shadow-md">
-                    {item.step}
-                  </span>
+                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-card border-2 border-border text-sm font-bold flex items-center justify-center shadow-md">{item.step}</span>
                 </div>
-
                 <h3 className="font-display font-bold text-xl mb-3">{item.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
-                  {item.description}
-                </p>
+                <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">{item.description}</p>
               </div>
             ))}
           </div>
@@ -425,11 +399,12 @@ const scrollCarousel = (direction: "left" | "right") => {
                 { name: 'awdpay', class: 'awdpay', letter: '' },
                 
               ].map((provider) => (
-               <div
+               <div 
   key={provider.name}
   className={cn(
     'flex items-center gap-3 px-6 py-4 rounded-2xl shadow-lg cursor-default transition',
-    provider.class === 'awdpay' && 'bg-orange-500 text-white hover:bg-orange-600'
+    provider.class === 'awdpay' &&
+      'bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#C9A227] text-black hover:opacity-90'
   )}
 >
                   <span className="text-2xl font-display font-bold">{provider.letter}</span>
@@ -458,11 +433,14 @@ const scrollCarousel = (direction: "left" | "right") => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/events">
-                <Button size="lg" className="px-8 shadow-md hover:shadow-glow transition-shadow gap-2">
-                  Découvrir les événements
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+  <Button
+    size="lg"
+    className="px-8 bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#C9A227] text-black shadow-md hover:opacity-90 transition-all gap-2"
+  >
+    Découvrir les événements
+    <ArrowRight className="h-4 w-4" />
+  </Button>
+</Link>
               <Link to="/register">
                 <Button size="lg" variant="outline" className="px-8">
                   Créer un compte

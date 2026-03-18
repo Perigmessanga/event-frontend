@@ -17,15 +17,12 @@ export function Header() {
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    // Check for dark mode preference
     const isDarkMode = document.documentElement.classList.contains('dark');
     setIsDark(isDarkMode);
   }, []);
@@ -40,6 +37,7 @@ export function Header() {
   const navLinks = [
     { href: '/', label: 'Accueil' },
     { href: '/events', label: 'Événements' },
+    { href: '/about', label: 'À propos' },
     { href: '/contacts', label: 'Contacts' },
   ];
 
@@ -61,21 +59,21 @@ export function Header() {
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-         <div className=" w-full bg-white z-50 flex items-center px-4 py-2 shadow-md">
-  <img src="/award dan.jpg" alt="AWDPAY" className="h-10 w-10 mr-2" />
-  <span className="font-bold text-lg">AWDPAY</span>
 
-  {/* Menu */}
-  <nav className="ml-auto flex gap-4">
-    <Link to="/about">À propos</Link>
-    
-    
-  </nav>
-</div>
+          {/* 🔥 LOGO + NOM en OR */}
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              src="/award dan.jpg"
+              alt="AWARD DAN"
+              className="h-10 w-10 object-cover"
+            />
+            <span className="font-bold text-lg tracking-wide" style={{ color: '#FFD700' }}>
+              AWARD DAN
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-2 ml-6">
             {navLinks.map(link => (
               <Link
                 key={link.href}
@@ -83,8 +81,8 @@ export function Header() {
                 className={cn(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
                   isActive(link.href)
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                    ? 'bg-yellow-100 text-yellow-600'
+                    : 'text-muted-foreground hover:text-yellow-600 hover:bg-yellow-50'
                 )}
               >
                 {link.label}
@@ -94,7 +92,6 @@ export function Header() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Dark Mode Toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -104,12 +101,11 @@ export function Header() {
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
 
-            {/* Cart */}
             <Link to="/checkout" className="relative">
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon">
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-glow">
+                  <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-yellow-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-glow">
                     {itemCount}
                   </span>
                 )}
@@ -166,7 +162,7 @@ export function Header() {
               <Button variant="ghost" size="icon">
                 <ShoppingCart className="h-5 w-5" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-primary text-primary-foreground text-xs font-bold rounded-full flex items-center justify-center shadow-glow">
+                  <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 bg-yellow-600 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-glow">
                     {itemCount}
                   </span>
                 )}
@@ -201,8 +197,8 @@ export function Header() {
                 className={cn(
                   'px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200',
                   isActive(link.href)
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                    ? 'bg-yellow-100 text-yellow-600'
+                    : 'text-muted-foreground hover:bg-yellow-50 hover:text-yellow-600'
                 )}
                 style={{ animationDelay: `${index * 50}ms` }}
               >
@@ -232,13 +228,13 @@ export function Header() {
                       setMobileMenuOpen(false);
                     }}
                   >
-                    <LogOut className="h-4 w-4" />
+                    <LogOut className="px-8 bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#C9A227] h-4 w-4" />
                     Déconnexion
                   </Button>
                 </div>
               ) : (
                 <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full shadow-sm">Connexion</Button>
+                  <Button className="px-8 bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#C9A227] w-full shadow-sm">Connexion</Button>
                 </Link>
               )}
             </div>
