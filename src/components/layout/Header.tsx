@@ -61,16 +61,13 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
 
           {/* 🔥 LOGO + NOM en OR */}
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/award dan.jpg"
-              alt="AWARD DAN"
-              className="h-10 w-10 object-cover"
-            />
-            <span className="font-bold text-lg tracking-wide" style={{ color: '#FFD700' }}>
-              AWARD DAN
-            </span>
-          </Link>
+         <Link to="/" className="flex items-center mb-4">
+  <img
+    src="/logo_AWARD-DAN.png"
+    alt="AWARD DAN"
+    className="h-auto w-28 transition-transform duration-300 hover:scale-105"
+  />
+</Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2 ml-6">

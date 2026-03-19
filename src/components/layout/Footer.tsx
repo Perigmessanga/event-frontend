@@ -18,12 +18,15 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand & Newsletter */}
           <div className="col-span-2 lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2.5 mb-4 group">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-105">
-                <img src="/award dan.jpg" alt="AWARD DAN" className="h-9 w-9 object-cover rounded-xl" />
-              </div>
-              <span className="font-display font-bold text-xl" style={{ color: '#FFD700' }}>Award Dan</span>
-            </Link>
+            
+            <Link to="/" className="flex items-center mb-4">
+  <img
+    src="/logo_AWARD-DAN.png"
+    alt="AWARD DAN"
+    className="h-auto w-60 transition-transform duration-300 hover:scale-105"
+  />
+</Link>
+
             <p className="text-sm text-muted-foreground mb-6 max-w-xs">
               La billetterie en ligne #1 en Côte d'Ivoire. Réservez vos billets en toute sécurité avec Mobile Money.
             </p>
