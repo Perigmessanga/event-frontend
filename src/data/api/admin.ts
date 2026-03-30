@@ -32,3 +32,4 @@ export const getAdvancedSales = (params: string) =>
 
 export const getAdminSales = () =>
   get<AdminSales>("/events/admin/sales/"); // <-- mettre /events/admin/sales
+
