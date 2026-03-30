@@ -3,7 +3,7 @@ stages:
   - deploy
 
 variables:
-  IMAGE_NAME: registry.gitlab.com/awdpay/event-frontend
+  IMAGE_NAME: $CI_REGISTRY_IMAGE
 
 build:
   stage: build
@@ -11,9 +11,8 @@ build:
   services:
     - docker:24-dind
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin registry.gitlab.com
+    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
   script:
-    # ⚠️ correction du chemin dockerfile (minuscule)
     - docker build -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f docker/dockerfile .
     - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:latest
@@ -28,7 +27,7 @@ deploy:
     - apk add --no-cache openssh-client
     - |
       if [ -z "$VPS_HOST" ] || [ -z "$VPS_USER" ] || [ -z "$SSH_PRIVATE_KEY" ]; then
-        echo "ERROR: VPS_HOST, VPS_USER, or SSH_PRIVATE_KEY is missing. Check if 'main' is a Protected Branch or Unprotect your variables."
+        echo "ERROR: VPS_HOST, VPS_USER, or SSH_PRIVATE_KEY is missing. Check your GitLab Settings > CI/CD > Variables (and uncheck Protected)."
         exit 1
       fi
     - mkdir -p ~/.ssh
@@ -40,7 +39,7 @@ deploy:
       ssh -i ~/.ssh/deploy_key $VPS_USER@$VPS_HOST << EOF
         set -e
         echo "Login to registry..."
-        echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin registry.gitlab.com
+        echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
 
         echo "Pulling latest image..."
         docker pull $IMAGE_NAME:latest
