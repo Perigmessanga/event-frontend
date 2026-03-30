@@ -16,6 +16,7 @@ export default function AdminOrdersPage() {
     setOrders(data.results);
     setCount(data.count);
   };
+  
 
   useEffect(() => {
     fetchOrders();
