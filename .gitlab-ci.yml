@@ -13,7 +13,8 @@ build:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin registry.gitlab.com
   script:
-    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f docker/Dockerfile .
+    # ⚠️ correction du chemin dockerfile (minuscule)
+    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f docker/dockerfile .
     - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
     - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:latest
     - docker push $IMAGE_NAME:latest
@@ -32,17 +33,21 @@ deploy:
   script:
     - |
       ssh -i ~/.ssh/deploy_key $VPS_USER@$VPS_HOST << 'EOF'
-        cd /var/www/event-frontend
 
         echo "Login registry"
         echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin registry.gitlab.com
 
+        echo "Pull image"
         docker pull registry.gitlab.com/awdpay/event-frontend:latest
 
-        docker compose down || true
-        docker compose up -d
+        echo "Stop old container"
+        docker stop event_frontend || true
+        docker rm event_frontend || true
 
-        echo "Frontend déployé"
+        echo "Run new container"
+        docker run -d --name event_frontend -p 3000:80 registry.gitlab.com/awdpay/event-frontend:latest
+
+        echo "Frontend déployé avec succès"
       EOF
   only:
     - prod
