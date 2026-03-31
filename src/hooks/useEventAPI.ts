@@ -124,7 +124,7 @@ export const useEventAPI = () => {
       const formData = createOrUpdateFormData(data);
       const token = localStorage.getItem('access_token');
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'}${ENDPOINTS.events.create}`,
+        `${import.meta.env.VITE_API_URL || 'http://api.awardsdan.com/api/v1'}${ENDPOINTS.events.create}`,
         {
           method: 'POST',
           body: formData,
@@ -152,7 +152,7 @@ export const useEventAPI = () => {
       const formData = createOrUpdateFormData(data);
       const token = localStorage.getItem('access_token');
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'}${ENDPOINTS.events.update(id.toString())}`,
+        `${import.meta.env.VITE_API_URL || 'http://api.awardsdan.com/api/v1'}${ENDPOINTS.events.update(id.toString())}`,
         { method: 'PATCH', body: formData, headers: token ? { Authorization: `Bearer ${token}` } : {} }
       );
       if (!res.ok) throw new Error('Erreur lors de la mise à jour de l\'événement');

@@ -9,7 +9,7 @@ export default function SendOTPForm() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://ton-backend.onrender.com/send-otp/", {
+      const res = await fetch("http://api.awardsdan.com/send-otp/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

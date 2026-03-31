@@ -13,7 +13,7 @@ export default function VerifyOTPForm({ email }: Props) {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://ton-backend.onrender.com/verify-otp/", {
+      const res = await fetch("https://api.awardsdan.com/verify-otp/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),

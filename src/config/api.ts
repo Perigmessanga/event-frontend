@@ -4,7 +4,7 @@
  * Configuration générale de l'API
  */
 export const API_CONFIG = {
-  baseUrl: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1',
+  baseUrl: import.meta.env.VITE_API_URL || 'http://api.awardsdan.com/api/v1',
   timeout: 30000,
   retryAttempts: 3,
   retryDelay: 1000,
