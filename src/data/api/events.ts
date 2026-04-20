@@ -20,12 +20,24 @@ export const getEventPublicDetail = async (eventId: string | number): Promise<Ev
       throw new Error("Événement introuvable");
     }
 
-    // Transformation pour correspondre au type Event côté frontend
+    // Transformation robuste pour correspondre au type Event côté frontend
+    const ticket_types = (data.ticketTypes || data.ticket_types || []).map((t: any) => ({
+      ...t,
+      id: String(t.id),                                          // ✅ Forcer en string
+      name: t.name || 'Billet Standard',
+      price: Number(t.price) || 0,
+      // La priorité est le champ 'available' du backend, sinon calcul sur place
+      available: Number(t.available ?? (Number(t.quantity_total) - Number(t.quantity_sold || 0)) ?? 0),
+      max_per_order: Number(t.max_per_order ?? 10),
+      description: t.description || ''
+    }));
+
     return {
       ...data,
-      ticketTypes: data.ticket_types || [],   // Toujours un tableau
-      date: data.start_date,                  // Renommage start_date → date
-      endDate: data.end_date,                 // Renommage end_date → endDate
+      location: data.location || 'Lieu non défini',
+      ticketTypes: ticket_types,
+      date: data.start_date || '',   
+      endDate: data.end_date || '',
     };
   } catch (error) {
     console.error("Erreur lors de la récupération de l'événement :", error);
